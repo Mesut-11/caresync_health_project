@@ -1,0 +1,11 @@
+{
+	"name": "LS_INSURANCE_AND_LAB",
+	"properties": {
+		"description": "Connect to ADLS to retrieve insurance and lab results data",
+		"annotations": [],
+		"type": "AzureBlobFS",
+		"typeProperties": {
+			"url": "https://insurance2labstoragelake.dfs.core.windows.net/"
+		}
+	}
+}
