@@ -1,0 +1,16 @@
+{
+	"name": "adf-caresync-by-stephen",
+	"properties": {
+		"trustModeClaimForMi": {
+			"value": "Disabled",
+			"editable": true,
+			"isExplicitlySet": false
+		}
+	},
+	"location": "southafricanorth",
+	"identity": {
+		"type": "SystemAssigned",
+		"principalId": "af8bd764-9f00-4e9d-a808-ecb412ee9080",
+		"tenantId": "5f90bcc3-c277-4fc7-8684-c0f2907d976c"
+	}
+}
