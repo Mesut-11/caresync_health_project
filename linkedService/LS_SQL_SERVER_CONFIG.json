@@ -1,0 +1,24 @@
+{
+	"name": "LS_SQL_SERVER_CONFIG",
+	"properties": {
+		"description": "Make a connection to the config tables",
+		"annotations": [],
+		"type": "AzureSqlDatabase",
+		"typeProperties": {
+			"server": "care-sync-health-data.database.windows.net",
+			"database": "care_sync_db",
+			"encrypt": "mandatory",
+			"trustServerCertificate": false,
+			"authenticationType": "SQL",
+			"userName": "stephenmandie",
+			"password": {
+				"type": "AzureKeyVaultSecret",
+				"store": {
+					"referenceName": "LS_MANAGE_SECRETS",
+					"type": "LinkedServiceReference"
+				},
+				"secretName": "care-sync-sql-server-password"
+			}
+		}
+	}
+}
