@@ -1,0 +1,12 @@
+{
+	"name": "LS_GET_CONFIG_INFO",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "LS_SQL_SERVER_CONFIG",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": []
+	}
+}
