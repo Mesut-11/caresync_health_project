@@ -53,13 +53,7 @@
 				"type": "Copy",
 				"dependsOn": [
 					{
-						"activity": "READ_TABLE_DETAILS",
-						"dependencyConditions": [
-							"Succeeded"
-						]
-					},
-					{
-						"activity": "Set Start Time",
+						"activity": "EVALUATE_LOAD_TYPE",
 						"dependencyConditions": [
 							"Succeeded"
 						]
@@ -234,6 +228,82 @@
 					],
 					"scriptBlockExecutionTimeout": "02:00:00"
 				}
+			},
+			{
+				"name": "EVALUATE_LOAD_TYPE",
+				"type": "IfCondition",
+				"dependsOn": [
+					{
+						"activity": "READ_TABLE_DETAILS",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					},
+					{
+						"activity": "Set Start Time",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"expression": {
+						"value": "@not(equals(activity('READ_TABLE_DETAILS').output.firstRow.load_type,'FULL'))",
+						"type": "Expression"
+					},
+					"ifTrueActivities": [
+						{
+							"name": "READ_WATERMARK_VALUE",
+							"type": "Lookup",
+							"dependsOn": [],
+							"policy": {
+								"timeout": "0.12:00:00",
+								"retry": 2,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"source": {
+									"type": "AzureSqlSource",
+									"sqlReaderQuery": {
+										"value": "SELECT watermark_value\nFROM ctrl.watermark\nWHERE table_id = @{pipeline().parameters.table_id}",
+										"type": "Expression"
+									},
+									"queryTimeout": "02:00:00",
+									"partitionOption": "None"
+								},
+								"dataset": {
+									"referenceName": "LS_GET_CONFIG_INFO",
+									"type": "DatasetReference"
+								}
+							}
+						},
+						{
+							"name": "STORE_WATERMARK_VALUE",
+							"type": "SetVariable",
+							"dependsOn": [
+								{
+									"activity": "READ_WATERMARK_VALUE",
+									"dependencyConditions": [
+										"Succeeded"
+									]
+								}
+							],
+							"policy": {
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"variableName": "watermark_value",
+								"value": ""
+							}
+						}
+					]
+				}
 			}
 		],
 		"parameters": {
@@ -246,6 +316,9 @@
 		},
 		"variables": {
 			"start_time": {
+				"type": "String"
+			},
+			"watermark_value": {
 				"type": "String"
 			}
 		},
