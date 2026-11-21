@@ -55,7 +55,7 @@
 							"type": "ExecutePipeline",
 							"dependsOn": [
 								{
-									"activity": "Script1",
+									"activity": "AUDIT_INGESTION_PROGRESS",
 									"dependencyConditions": [
 										"Succeeded"
 									]
@@ -80,19 +80,67 @@
 							}
 						},
 						{
-							"name": "Script1",
+							"name": "AUDIT_INGESTION_PROGRESS",
 							"type": "Script",
 							"dependsOn": [],
 							"policy": {
 								"timeout": "0.12:00:00",
-								"retry": 0,
+								"retry": 2,
 								"retryIntervalInSeconds": 30,
 								"secureOutput": false,
 								"secureInput": false
 							},
 							"userProperties": [],
+							"linkedServiceName": {
+								"referenceName": "LS_SQL_SERVER_CONFIG",
+								"type": "LinkedServiceReference"
+							},
 							"typeProperties": {
-								"scripts": [],
+								"scripts": [
+									{
+										"type": "Query",
+										"text": {
+											"value": "INSERT INTO\n    ctrl.audit_log (\n        adf_run_id,\n        table_id,\n        stage,\n        status,\n        start_time\n    )\n    VALUES (\n    'place_holder',\n    @{item().table_id},\n    'SOURCE_TO_SILVER',\n    'IN PROGRESS'\n      SYSUTCDATETIME() \n    )",
+											"type": "Expression"
+										}
+									}
+								],
+								"scriptBlockExecutionTimeout": "02:00:00"
+							}
+						},
+						{
+							"name": "AUDIT_INGESTION_FAILURE",
+							"type": "Script",
+							"dependsOn": [
+								{
+									"activity": "EXECUTE_FROM_SOURCE_TO_SILVER",
+									"dependencyConditions": [
+										"Failed"
+									]
+								}
+							],
+							"policy": {
+								"timeout": "0.12:00:00",
+								"retry": 2,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"linkedServiceName": {
+								"referenceName": "LS_SQL_SERVER_CONFIG",
+								"type": "LinkedServiceReference"
+							},
+							"typeProperties": {
+								"scripts": [
+									{
+										"type": "Query",
+										"text": {
+											"value": "INSERT INTO\n    ctrl.audit_log (\n        adf_run_id,\n        table_id,\n        stage,\n        status,\n        start_time\n    )\n    VALUES (\n    'place_holder',\n    @{item().table_id},\n    'SOURCE_TO_SILVER',\n    'IN PROGRESS'\n      SYSUTCDATETIME() \n    )",
+											"type": "Expression"
+										}
+									}
+								],
 								"scriptBlockExecutionTimeout": "02:00:00"
 							}
 						}
