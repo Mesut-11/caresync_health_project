@@ -299,7 +299,10 @@
 							"userProperties": [],
 							"typeProperties": {
 								"variableName": "watermark_value",
-								"value": ""
+								"value": {
+									"value": "@activity('READ_WATERMARK_VALUE').output.firstRow.watermark_value",
+									"type": "Expression"
+								}
 							}
 						}
 					]
