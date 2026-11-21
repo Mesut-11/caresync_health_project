@@ -1,0 +1,19 @@
+{
+	"name": "LS_DATABRICK_COMPUTE",
+	"properties": {
+		"annotations": [],
+		"type": "AzureDatabricks",
+		"typeProperties": {
+			"domain": "https://adb-7405617594212684.4.azuredatabricks.net",
+			"accessToken": {
+				"type": "AzureKeyVaultSecret",
+				"store": {
+					"referenceName": "LS_MANAGE_SECRETS",
+					"type": "LinkedServiceReference"
+				},
+				"secretName": "databricks-care-sync-access-token"
+			},
+			"existingClusterId": "1120-200834-nnlv0xih"
+		}
+	}
+}
