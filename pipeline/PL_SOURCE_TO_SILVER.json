@@ -53,7 +53,14 @@
 						{
 							"name": "EXECUTE_FROM_SOURCE_TO_SILVER",
 							"type": "ExecutePipeline",
-							"dependsOn": [],
+							"dependsOn": [
+								{
+									"activity": "Script1",
+									"dependencyConditions": [
+										"Succeeded"
+									]
+								}
+							],
 							"policy": {
 								"secureInput": false
 							},
@@ -70,6 +77,23 @@
 										"type": "Expression"
 									}
 								}
+							}
+						},
+						{
+							"name": "Script1",
+							"type": "Script",
+							"dependsOn": [],
+							"policy": {
+								"timeout": "0.12:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"scripts": [],
+								"scriptBlockExecutionTimeout": "02:00:00"
 							}
 						}
 					]
