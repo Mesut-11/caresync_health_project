@@ -48,26 +48,7 @@
 					"items": {
 						"value": "@activity('Read_From_Config_Table').output.value",
 						"type": "Expression"
-					},
-					"activities": [
-						{
-							"name": "HOLD_TABLE_ID_INFO",
-							"type": "SetVariable",
-							"dependsOn": [],
-							"policy": {
-								"secureOutput": false,
-								"secureInput": false
-							},
-							"userProperties": [],
-							"typeProperties": {
-								"variableName": "table_id",
-								"value": {
-									"value": "@string(item().table_id)",
-									"type": "Expression"
-								}
-							}
-						}
-					]
+					}
 				}
 			}
 		],
