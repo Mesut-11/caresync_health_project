@@ -120,6 +120,47 @@
 						}
 					}
 				]
+			},
+			{
+				"name": "FROM_LANDING_TO_BRONZE",
+				"type": "DatabricksNotebook",
+				"dependsOn": [
+					{
+						"activity": "FROM_SOURCE_TO_LANDING_INGESTION",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 2,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"notebookPath": "/care_sync_project/care_sync_adb_repo/From_Landing_Bronze",
+					"baseParameters": {
+						"source_system": {
+							"value": "@activity('READ_TABLE_DETAILS').output.firstRow.source_system",
+							"type": "Expression"
+						},
+						"table_name": {
+							"value": "@activity('READ_TABLE_DETAILS').output.firstRow.source_table_name",
+							"type": "Expression"
+						},
+						"landing_timestamp": {
+							"value": "@variables('start_time')",
+							"type": "Expression"
+						}
+					}
+				},
+				"linkedServiceName": {
+					"referenceName": "LS_DATABRICK_COMPUTE",
+					"type": "LinkedServiceReference"
+				}
 			}
 		],
 		"parameters": {
